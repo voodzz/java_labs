@@ -1,8 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -54,7 +52,7 @@ public class Main {
     static int[][] readInputWithoutSize(String fileName) throws FileNotFoundException, IllegalArgumentException {
         Scanner scanner = new Scanner(new File(fileName));
 
-        List<String[]> lines = new ArrayList<>();
+        ArrayList<String[]> lines = new ArrayList<>();
         while (scanner.hasNext()) {
             lines.add(scanner.nextLine().split("\\s+"));
         }
