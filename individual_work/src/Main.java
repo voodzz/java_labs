@@ -26,7 +26,7 @@ public class Main {
     }
 
     public static void executeTask3(String string) {
-        String[] words = string.split("[\\s]");
+        String[] words = string.split("\\s+");
         StringBuilder result = new StringBuilder();
 
         for (String word : words) {
