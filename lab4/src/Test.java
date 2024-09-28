@@ -5,7 +5,10 @@ public class Test {
         tree.add(3);
         tree.add(7);
         tree.add(1);
-        System.out.println(tree.contains(1));
+        tree.add(4);
+        tree.leftNodeRightTraversal();
+        System.out.println();
+        tree.delete(3);
         tree.leftNodeRightTraversal();
     }
 }

@@ -17,10 +17,6 @@ public class Tree<T extends Comparable<T>> {
         return currentNode;
     }
 
-    private Node<T> find(T value) {
-        return find(root, value);
-    }
-
     public boolean contains(T value) {
         return find(root, value) != null;
     }
@@ -72,6 +68,46 @@ public class Tree<T extends Comparable<T>> {
             System.out.println(currentNode.value);
             LNRTraversal(currentNode.rightChild);
         }
+    }
+
+    public void delete(T value) {
+        delete(root, value);
+    }
+
+    private Node<T> delete(Node<T> root, T value) {
+        if (root == null) {
+            return null;
+        } else if (value.compareTo(root.value) < 0) {
+            root.leftChild = delete(root.leftChild, value);
+        } else if (value.compareTo(root.value) > 0) {
+            root.rightChild = delete(root.rightChild, value);
+        } else {
+            // Case 1: No children
+            if (root.leftChild == null && root.rightChild == null) {
+                root = null;
+                return root;
+            // Case 2: One child
+            } else if (root.leftChild == null) {
+                root = root.rightChild;
+                return root;
+            } else if (root.rightChild == null) {
+                root = root.leftChild;
+                return root;
+            // Case 3: Two children
+            } else {
+                Node<T> tmp = findMinInRightSubtree(root.rightChild);
+                root.setValue(tmp.value);
+                root.rightChild = delete(root.rightChild, tmp.value);
+            }
+        }
+        return root;
+    }
+
+    private Node<T> findMinInRightSubtree(Node<T> root) {
+        while (root.leftChild != null) {
+            root = root.leftChild;
+        }
+        return root;
     }
 
     private static class Node<T> {
