@@ -4,7 +4,6 @@ public class Main {
         Tree<Integer> tree1 = new Tree<>(dataForTree1);
         tree1.leftNodeRightTraversal();
         System.out.println();
-        tree1.delete(3);
         tree1.leftRightNodeTraversal();
         System.out.println();
 
