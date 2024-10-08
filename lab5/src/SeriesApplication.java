@@ -21,7 +21,8 @@ public class SeriesApplication extends JFrame {
     SeriesApplication() {
         setContentPane(Panel);
         setTitle("Series");
-        setSize(600, 300);
+        setSize(600, 350);
+        setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         numberOfElementsSpinner.setModel(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
