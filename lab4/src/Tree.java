@@ -1,10 +1,6 @@
 public class Tree<T extends Comparable<T>> {
     private Node<T> root;
 
-    Tree() {
-        root = null;
-    }
-
     Tree(T[] elements) {
         for (T element : elements) {
             this.add(element);
