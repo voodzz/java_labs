@@ -16,6 +16,8 @@ public class SeriesApplication extends JFrame {
     private JButton calculateButton;
     private JButton clearButton;
 
+    private Series series;
+
     SeriesApplication() {
         setContentPane(Panel);
         setTitle("Series");
@@ -39,10 +41,10 @@ public class SeriesApplication extends JFrame {
                 int numberOfElements = (int)numberOfElementsSpinner.getValue();
 
                 if(exponentialRadioButton.isSelected()) {
-                    Exponential series = new Exponential(firstElement, delta, numberOfElements);
+                    series = new Exponential(firstElement, delta, numberOfElements);
                     outputTextArea.setText("Elements: " + series.toString() + "\nSum: " + series.findSum());
                 } else if (linearRadioButton.isSelected()) {
-                    Linear series = new Linear(firstElement, delta, numberOfElements);
+                    series = new Linear(firstElement, delta, numberOfElements);
                     outputTextArea.setText("Elements: " + series.toString() + "\nSum: " + series.findSum());
                 }
             }

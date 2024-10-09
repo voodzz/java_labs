@@ -2,9 +2,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 abstract class Series {
-    double firstElement;
-    double delta;
-    int numberOfElements;
+    protected double firstElement;
+    protected double delta;
+    protected int numberOfElements;
 
     Series() {
         firstElement = 0;
@@ -30,7 +30,7 @@ abstract class Series {
 
     @Override
     public String toString() {
-        StringBuffer result = new StringBuffer("[");
+        StringBuilder result = new StringBuilder("[");
         for (int i = 1; i <= numberOfElements; ++i) {
             if (i != numberOfElements) {
                 result.append(findElementJ(i)).append(", ");
@@ -41,10 +41,21 @@ abstract class Series {
         return result.toString();
     }
 
+    // TODO: try PrintWriter
     public void printToFile(String filePath) throws IOException {
         FileWriter writer = new FileWriter(filePath, false);
         writer.write("Elements of the series: " + toString() + '\n');
         writer.write("Sum of the series: " + findSum());
         writer.close();
+    }
+
+    void setFirstElement(double firstElement) {
+        this.firstElement = firstElement;
+    }
+    public void setDelta(double delta) {
+        this.delta = delta;
+    }
+    public void setNumberOfElements(int numberOfElements) {
+        this.numberOfElements = numberOfElements;
     }
 }
