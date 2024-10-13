@@ -41,7 +41,6 @@ abstract class Series {
         return result.toString();
     }
 
-    // TODO: try PrintWriter
     public void printToFile(String filePath) throws IOException {
         FileWriter writer = new FileWriter(filePath, false);
         writer.write("Elements of the series: " + toString() + '\n');

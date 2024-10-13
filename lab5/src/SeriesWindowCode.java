@@ -160,11 +160,11 @@ public class SeriesWindowCode extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 String filePath = fileNameTextField.getText();
-                initializeSeries();
                 try {
-                    series.printToFile("output.txt");
-                } catch (IOException exception) {
-                    JOptionPane errorWindow = new JOptionPane(exception.getMessage());
+                    initializeSeries();
+                    series.printToFile(fileNameTextField.getText());
+                } catch (IOException | NumberFormatException exception) {
+                    JOptionPane.showMessageDialog(null, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -172,7 +172,7 @@ public class SeriesWindowCode extends JFrame {
         setVisible(true);
     }
 
-    void initializeSeries() {
+    void initializeSeries() throws NumberFormatException{
         double firstElement = Double.parseDouble(firstElementTextField.getText());
         double delta = Double.parseDouble(deltaTextField.getText());
         int numberOfElements = (int) numberOfElementsSpinner.getValue();
