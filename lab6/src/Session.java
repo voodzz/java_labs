@@ -1,21 +1,27 @@
-import com.sun.source.tree.Tree;
-
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 public class Session {
-    ArrayList<Student> session;
+    private ArrayList<Student> session;
+    private Set<String> subjects;
 
     @Override
     public String toString() {
-        return "Session{" +
-                "session=" + session +
-                '}';
+        StringBuilder result = new StringBuilder();
+
+        for (Student student : session) {
+            result.append(student.toString()); // каждый студент уже имеет свой формат в методе toString()
+        }
+
+        return result.toString().trim();
     }
 
     public Session() {
         session = new ArrayList<Student>();
+        subjects = new TreeSet<>();
     }
 
     void readDataFromFile(String fileName) throws FileNotFoundException, NumberFormatException {
@@ -29,7 +35,22 @@ public class Session {
                 subjectsAndMarksMap.put(line[i], Integer.parseInt(line[i + 1]));
             }
             session.add(new Student(id, surname, subjectsAndMarksMap));
+            subjects.addAll(subjectsAndMarksMap.keySet());
         }
         scanner.close();
+    }
+
+    void writeDataToFile(String fileName) throws IOException {
+        FileWriter writer = new FileWriter(fileName);
+        writer.write(toString());
+        writer.close();
+    }
+
+    public ArrayList<Student> getSession() {
+        return session;
+    }
+
+    public Set<String> getSubjects() {
+        return subjects;
     }
 }

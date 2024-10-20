@@ -2,6 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 public class InputWindow extends JFrame {
     private JPanel panel;
@@ -46,11 +49,23 @@ public class InputWindow extends JFrame {
 
         setVisible(true);
 
-        readFromFileButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                app.setVisible(true);
+        readFromFileButton.addActionListener(actionEvent -> {
+            try {
+                Scanner scanner = new Scanner(new File(inputFileTextField.getText()));
+                scanner.useDelimiter("\n");
+                StringBuilder buffer = new StringBuilder();
+                while (scanner.hasNext()) {
+                    buffer.append(scanner.next()).append('\n');
+                }
+                scanner.close();
+                buffer.deleteCharAt(buffer.length() - 1);
+                app.getInputTextArea().setText(buffer.toString());
+                app.getSession().readDataFromFile(inputFileTextField.getText());
+                app.setFileName(inputFileTextField.getText());
                 setVisible(false);
+                app.setVisible(true);
+            } catch (FileNotFoundException exception) {
+                JOptionPane.showMessageDialog(null, exception.getMessage(), "Input exception", JOptionPane.ERROR_MESSAGE);
             }
         });
     }

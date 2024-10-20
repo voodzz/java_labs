@@ -1,16 +1,30 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class SessionApplicationWindow extends JFrame {
     private JPanel panel;
     private JLabel inputAreaLabel;
     private JLabel newStudentLabel;
-    private JLabel studentNameLabel;
+    private JLabel idLabel;
+    private JLabel studentSurnameLabel;
     private JLabel additionalResultsLabel;
+    private JLabel subjectsLabel;
     private JTextArea inputTextArea;
-    private JTextArea additionalResultsTextArea;
+    private JTextArea subjectsTextArea;
+    private JTextField additionalResultsTextField;
+    private JTextField idTextField;
     private JTextField studentNameTextField;
     private JButton addStudentButton;
+    private JButton listSubjectsButton;
+
+    private Font labelFont;
+    private Font boldLabelFont;
+
+    private Session session;
+    private String fileName;
 
     public SessionApplicationWindow() {
         setTitle("Session Observer");
@@ -19,6 +33,8 @@ public class SessionApplicationWindow extends JFrame {
         setSize(800, 1100);
         setLocationRelativeTo(null);
 
+        session = new Session();
+
         panel = new JPanel(new GridBagLayout());
         setContentPane(panel);
 
@@ -26,29 +42,51 @@ public class SessionApplicationWindow extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 5, 5, 5);
 
+        labelFont = new Font("Arial", Font.PLAIN, 18);
+        boldLabelFont = new Font("Arial", Font.BOLD, 18);
+
         // Initializing labels
-        inputAreaLabel = new JLabel("Input:");
+        inputAreaLabel = new JLabel("Data");
         inputAreaLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        inputAreaLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+        inputAreaLabel.setFont(boldLabelFont);
+
         newStudentLabel = new JLabel("New student");
         newStudentLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        newStudentLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        studentNameLabel = new JLabel("Name:");
-        studentNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        studentNameLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+        newStudentLabel.setFont(boldLabelFont);
+
+        idLabel = new JLabel("ID:");
+        idLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        idLabel.setFont(labelFont);
+
+        studentSurnameLabel = new JLabel("Name:");
+        studentSurnameLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        studentSurnameLabel.setFont(labelFont);
+
         additionalResultsLabel = new JLabel("Session results (subj-mark):");
         additionalResultsLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        additionalResultsLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+        additionalResultsLabel.setFont(labelFont);
+
+        subjectsLabel = new JLabel("Session subjects (alphabetical order)");
+        subjectsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        subjectsLabel.setFont(boldLabelFont);
 
         // Initializing textAreas
-        inputTextArea = new JTextArea(10, 20);
-        additionalResultsTextArea = new JTextArea(10, 40);
+        inputTextArea = new JTextArea(10, 30);
+        inputTextArea.setLineWrap(true);
+        inputTextArea.setWrapStyleWord(true);
+
+        subjectsTextArea = new JTextArea(2, 30);
+        subjectsTextArea.setLineWrap(true);
+        subjectsTextArea.setWrapStyleWord(true);
 
         // Initializing textFields
+        additionalResultsTextField = new JTextField();
         studentNameTextField = new JTextField();
+        idTextField = new JTextField();
 
         // Initializing buttons
         addStudentButton = new JButton("Add");
+        listSubjectsButton = new JButton("List Subjects");
 
         // Placing everything
         // First row
@@ -60,7 +98,7 @@ public class SessionApplicationWindow extends JFrame {
         // Second row
         gbc.gridx = 0;
         gbc.gridy = 1;
-        panel.add(inputTextArea, gbc);
+        panel.add(new JScrollPane(inputTextArea), gbc);
 
         // Third row
         gbc.gridx = 0;
@@ -68,26 +106,108 @@ public class SessionApplicationWindow extends JFrame {
         panel.add(newStudentLabel, gbc);
 
         // Fourth row
-        gbc.gridy = 3;
         gbc.gridwidth = 1;
-        panel.add(studentNameLabel, gbc);
+        gbc.gridy = 3;
+        panel.add(idLabel, gbc);
         gbc.gridx = 1;
-        panel.add(studentNameTextField, gbc);
+        panel.add(idTextField, gbc);
 
         // Fifth row
         gbc.gridx = 0;
         gbc.gridy = 4;
+        panel.add(studentSurnameLabel, gbc);
+        gbc.gridx = 1;
+        panel.add(studentNameTextField, gbc);
+
+        // Sixth row
+        gbc.gridx = 0;
+        gbc.gridy = 5;
         gbc.gridwidth = 2;
         panel.add(additionalResultsLabel, gbc);
 
-        // Sixth row
-        gbc.gridy = 5;
-        panel.add(additionalResultsTextArea, gbc);
-
         // Seventh row
         gbc.gridy = 6;
+        panel.add(additionalResultsTextField, gbc);
+
+        // Eighth row
+        gbc.gridy = 7;
         panel.add(addStudentButton, gbc);
 
+        // Ninth row
+        gbc.gridy = 8;
+        panel.add(subjectsLabel, gbc);
+
+        // Tenth row
+        gbc.gridy = 9;
+        panel.add(new JScrollPane(subjectsTextArea), gbc);
+
+        // Eleventh row
+        gbc.gridy = 10;
+        panel.add(listSubjectsButton, gbc);
+
         setVisible(false);
+
+        listSubjectsButton.addActionListener(actionEvent -> listSubjects());
+
+        addStudentButton.addActionListener(actionEvent -> {
+            if (idTextField.getText().isEmpty() || studentNameTextField.getText().isEmpty() || additionalResultsTextField.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Input is missing", "Wrong Input", JOptionPane.ERROR_MESSAGE);
+            } else {
+                try {
+                    Integer id = Integer.parseInt(idTextField.getText());
+                    checkForDuplicates(id);
+                    String surname = studentNameTextField.getText();
+                    String[] subjectsAndMarksTokens = additionalResultsTextField.getText().split("[-\\s]+");
+                    Map<String, Integer> subjectsAndMarksMap = new TreeMap<>();
+                    for (int i = 0; i < subjectsAndMarksTokens.length; i += 2) {
+                        subjectsAndMarksMap.put(subjectsAndMarksTokens[i], Integer.parseInt(subjectsAndMarksTokens[i + 1]));
+                    }
+                    session.getSubjects().addAll(subjectsAndMarksMap.keySet());
+                    session.getSession().add(new Student(id, surname, subjectsAndMarksMap));
+                    StringBuilder buffer = new StringBuilder(inputTextArea.getText());
+                    for (Student student : session.getSession()) {
+                        buffer.append(student);
+                    }
+                    buffer.deleteCharAt(buffer.length() - 1);
+                    inputTextArea.setText(buffer.toString());
+                    session.writeDataToFile(fileName);
+                    listSubjects();
+                } catch (NumberFormatException | IndexOutOfBoundsException | IOException exception) {
+                    JOptionPane.showMessageDialog(null, exception.getMessage(),
+                                                "Exception", JOptionPane.ERROR_MESSAGE);
+                }  catch (IllegalArgumentException exception) {
+                    JOptionPane.showMessageDialog(null, exception.getMessage(),
+                            "Input error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+    }
+
+    void checkForDuplicates(Integer id) throws IllegalArgumentException{
+        for (Student student : session.getSession()) {
+            if (student.getId().equals(id)) {
+                throw new IllegalArgumentException("Student with this ID already exists.");
+            }
+        }
+    }
+
+    void listSubjects() {
+        StringBuilder buffer = new StringBuilder(session.getSubjects().toString());
+        buffer.deleteCharAt(0);
+        buffer.deleteCharAt(buffer.length() - 1);
+        subjectsTextArea.setText(buffer.toString());
+    }
+
+    public JTextArea getInputTextArea() {
+        return inputTextArea;
+    }
+
+    public Session getSession() {
+        return session;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }

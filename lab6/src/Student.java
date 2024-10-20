@@ -1,3 +1,4 @@
+import java.util.Iterator;
 import java.util.Map;
 
 public class Student {
@@ -19,11 +20,16 @@ public class Student {
 
     @Override
     public String toString() {
-        return "Student{" +
-                "id=" + id +
-                ", surname='" + surname + '\'' +
-                ", subjectAndMarkMap=" + subjectAndMarkMap +
-                "}\n";
+        return id.toString() + " " + surname + " " + mapToString() + '\n';
+    }
+
+    private String mapToString() {
+        StringBuilder result = new StringBuilder();
+        for (String key : subjectAndMarkMap.keySet()) {
+            result.append(key).append("-").append(subjectAndMarkMap.get(key)).append(" ");
+        }
+        result.deleteCharAt(result.length() - 1);
+        return result.toString();
     }
 
     public Integer getId() {
