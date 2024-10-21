@@ -19,6 +19,7 @@ public class SessionApplicationWindow extends JFrame {
     private JTextField studentNameTextField;
     private JButton addStudentButton;
     private JButton listSubjectsButton;
+    private JButton openNewFileButton;
 
     private Font labelFont;
     private Font boldLabelFont;
@@ -26,7 +27,7 @@ public class SessionApplicationWindow extends JFrame {
     private Session session;
     private String fileName;
 
-    public SessionApplicationWindow() {
+    public SessionApplicationWindow(InputWindow inputWindow) {
         setTitle("Session Observer");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(true);
@@ -145,6 +146,14 @@ public class SessionApplicationWindow extends JFrame {
         gbc.gridy = 10;
         panel.add(listSubjectsButton, gbc);
 
+        // 12th row
+        openNewFileButton = inputWindow.getOpenNewFileButton();
+        gbc.gridy = 11;
+        panel.add(openNewFileButton, gbc);
+
+        panel.revalidate();
+        panel.repaint();
+
         setVisible(false);
 
         listSubjectsButton.addActionListener(actionEvent -> listSubjects());
@@ -181,7 +190,6 @@ public class SessionApplicationWindow extends JFrame {
                 }
             }
         });
-
     }
 
     void checkForDuplicates(Integer id) throws IllegalArgumentException{
@@ -199,6 +207,10 @@ public class SessionApplicationWindow extends JFrame {
         subjectsTextArea.setText(buffer.toString());
     }
 
+    public JPanel getPanel() {
+        return panel;
+    }
+
     public JTextArea getInputTextArea() {
         return inputTextArea;
     }
@@ -209,5 +221,21 @@ public class SessionApplicationWindow extends JFrame {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public JTextField getIdTextField() {
+        return idTextField;
+    }
+
+    public JTextField getStudentNameTextField() {
+        return studentNameTextField;
+    }
+
+    public JTextField getAdditionalResultsTextField() {
+        return additionalResultsTextField;
+    }
+
+    public JTextArea getSubjectsTextArea() {
+        return subjectsTextArea;
     }
 }

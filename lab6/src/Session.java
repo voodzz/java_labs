@@ -20,12 +20,13 @@ public class Session {
     }
 
     public Session() {
-        session = new ArrayList<Student>();
+        session = new ArrayList<>();
         subjects = new TreeSet<>();
     }
 
     void readDataFromFile(String fileName) throws FileNotFoundException, NumberFormatException {
         Scanner scanner = new Scanner(new File(fileName));
+        session.clear();
         while(scanner.hasNext()) {
             String[] line = scanner.nextLine().split("[-\\s]+");
             Map<String, Integer> subjectsAndMarksMap = new TreeMap<>();

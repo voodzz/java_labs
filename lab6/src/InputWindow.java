@@ -11,11 +11,11 @@ public class InputWindow extends JFrame {
     private JLabel inputFileLabel;
     private JTextField inputFileTextField;
     private JButton readFromFileButton;
+    private JButton openNewFileButton;
 
     private SessionApplicationWindow app;
 
     InputWindow() {
-        app = new SessionApplicationWindow();
 
         setTitle("Session Observer");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -45,6 +45,10 @@ public class InputWindow extends JFrame {
         gbc.gridy = 0;
         panel.add(readFromFileButton, gbc);
 
+        openNewFileButton = new JButton("Open New File");
+
+        app = new SessionApplicationWindow(this);
+
         add(panel);
 
         setVisible(true);
@@ -64,9 +68,22 @@ public class InputWindow extends JFrame {
                 app.setFileName(inputFileTextField.getText());
                 setVisible(false);
                 app.setVisible(true);
-            } catch (FileNotFoundException exception) {
+            } catch (FileNotFoundException | NumberFormatException exception) {
                 JOptionPane.showMessageDialog(null, exception.getMessage(), "Input exception", JOptionPane.ERROR_MESSAGE);
             }
         });
+
+        openNewFileButton.addActionListener(actionEvent -> {
+            setVisible(true);
+            app.setVisible(false);
+            app.getIdTextField().setText("");
+            app.getStudentNameTextField().setText("");
+            app.getAdditionalResultsTextField().setText("");
+            app.getSubjectsTextArea().setText("");
+        });
+    }
+
+    public JButton getOpenNewFileButton() {
+        return openNewFileButton;
     }
 }
