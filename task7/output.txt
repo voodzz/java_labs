@@ -1,0 +1,7 @@
+Course{name='MA', students=[Postgraduate{supervisor=Person{name='Paul Dietel'}} Student{email='te2@gmal.com', login='te2'} Person{name='Erik Track'}
+, Postgraduate{supervisor=Person{name='Cay Horstmann'}} Student{email='jj8@gmal.com', login='jj8'} Person{name='Jack Jonson'}
+, Undergraduate{tutor=Person{name='Paul Dietel'}} Student{email='gg4@gamil.com', login='gg4'} Person{name='Garrett Gordon'}
+, Undergraduate{tutor=Person{name='Paul Dietel'}} Student{email='nm@gmail.com', login='nm2'} Person{name='Nigel Mansell'}
+, Postgraduate{supervisor=Person{name='Cay Horstmann'}} Student{email='yj34@gmal.com', login='yj34'} Person{name='Ying Ju'}
+, Undergraduate{tutor=Person{name='Cay Horstmann'}} Student{email='pr3@gamil.com', login='pr3'} Person{name='Patrick Richter'}
+]}

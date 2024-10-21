@@ -1,7 +1,7 @@
 import java.util.Comparator;
 import java.util.Objects;
 
-public class Student extends Person implements Comparable<Student> {
+public class Student extends Person implements Notifiable {
     private String email;
     private String login;
 
@@ -36,7 +36,7 @@ public class Student extends Person implements Comparable<Student> {
     }
 
     @Override
-    public int compareTo(Student student) {
-        return this.getEmail().compareTo(student.getEmail());
+    public void notify(String message) {
+        System.out.println("Notifying " + this.email);
     }
 }
