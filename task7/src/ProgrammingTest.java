@@ -40,5 +40,7 @@ public class ProgrammingTest {
 
         Writer writer = new Writer();
         writer.saveCourseToFile(course, "output.txt");
+
+        Frame frame = new Frame(course);
     }
 }
