@@ -34,11 +34,16 @@ public class Course implements Iterable<Student>{
 
     public Set<Student> getStudentsByCondition(Predicate<Student> predicate) {
         Set<Student> result = new HashSet<>();
-        for (Student student : students) {
+        forEach(student -> {
             if (predicate.test(student)) {
                 result.add(student);
             }
-        }
+        });
+//        for (Student student : students) {
+//            if (predicate.test(student)) {
+//                result.add(student);
+//            }
+//        }
         return result;
     }
 

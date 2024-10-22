@@ -9,9 +9,12 @@ import java.util.Scanner;
 public class InputWindow extends JFrame {
     private JPanel panel;
     private JLabel inputFileLabel;
+    private JLabel dataLabel;
     private JTextField inputFileTextField;
+    private JTextArea dataTextArea;
     private JButton readFromFileButton;
     private JButton openNewFileButton;
+    private JButton workWithDataButton;
 
     private SessionApplicationWindow app;
 
@@ -20,32 +23,47 @@ public class InputWindow extends JFrame {
         setTitle("Session Observer");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
-        setSize(400, 100);
+        setSize(400, 400);
         setLocationRelativeTo(null);
 
         panel = new JPanel(new GridBagLayout());  // Используем GridBagLayout
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);  // Отступы между элементами
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Настройки для метки
         inputFileLabel = new JLabel("Input file:");
-        gbc.gridx = 0;
+        dataLabel = new JLabel("Data:");
+        dataLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+        inputFileTextField = new JTextField(10);
+        dataTextArea = new JTextArea(10, 30);
+        dataTextArea.setLineWrap(true);
+        dataTextArea.setWrapStyleWord(true);
+
+        readFromFileButton = new JButton("Read");
+        openNewFileButton = new JButton("Open New File");
+        workWithDataButton = new JButton("Work With Data");
+
         gbc.gridy = 0;
+        gbc.gridx = 0;
         panel.add(inputFileLabel, gbc);
 
-        // Настройки для текстового поля
-        inputFileTextField = new JTextField(10);
         gbc.gridx = 1;
-        gbc.gridy = 0;
         panel.add(inputFileTextField, gbc);
 
-        // Настройки для кнопки
-        readFromFileButton = new JButton("Read");
         gbc.gridx = 2;
-        gbc.gridy = 0;
         panel.add(readFromFileButton, gbc);
 
-        openNewFileButton = new JButton("Open New File");
+        gbc.gridwidth = 3;
+        gbc.gridy = 1;
+        gbc.gridx = 0;
+        panel.add(dataLabel, gbc);
+
+        gbc.gridy = 2;
+        panel.add(new JScrollPane(dataTextArea), gbc);
+
+        gbc.gridy = 3;
+        panel.add(workWithDataButton, gbc);
 
         app = new SessionApplicationWindow(this);
 
@@ -53,17 +71,9 @@ public class InputWindow extends JFrame {
 
         setVisible(true);
 
-        readFromFileButton.addActionListener(actionEvent -> {
+        workWithDataButton.addActionListener(actionEvent -> {
             try {
-                Scanner scanner = new Scanner(new File(inputFileTextField.getText()));
-                scanner.useDelimiter("\n");
-                StringBuilder buffer = new StringBuilder();
-                while (scanner.hasNext()) {
-                    buffer.append(scanner.next()).append('\n');
-                }
-                scanner.close();
-                buffer.deleteCharAt(buffer.length() - 1);
-                app.getInputTextArea().setText(buffer.toString());
+                app.getInputTextArea().setText(String.valueOf(readFromFile()));
                 app.getSession().readDataFromFile(inputFileTextField.getText());
                 app.setFileName(inputFileTextField.getText());
                 setVisible(false);
@@ -74,6 +84,8 @@ public class InputWindow extends JFrame {
         });
 
         openNewFileButton.addActionListener(actionEvent -> {
+            dataTextArea.setText("");
+            inputFileTextField.setText("");
             setVisible(true);
             app.setVisible(false);
             app.getIdTextField().setText("");
@@ -81,9 +93,29 @@ public class InputWindow extends JFrame {
             app.getAdditionalResultsTextField().setText("");
             app.getSubjectsTextArea().setText("");
         });
+
+        readFromFileButton.addActionListener(actionEvent -> {
+            dataTextArea.setText(String.valueOf(readFromFile()));
+        });
     }
 
     public JButton getOpenNewFileButton() {
         return openNewFileButton;
+    }
+
+    private StringBuilder readFromFile() {
+        StringBuilder buffer = new StringBuilder();
+        try {
+            Scanner scanner = new Scanner(new File(inputFileTextField.getText()));
+            scanner.useDelimiter("\n");
+            while (scanner.hasNext()) {
+                buffer.append(scanner.next()).append('\n');
+            }
+            scanner.close();
+            buffer.deleteCharAt(buffer.length() - 1);
+        } catch (FileNotFoundException exception) {
+            JOptionPane.showMessageDialog(null, exception.getMessage(), "Input exception", JOptionPane.ERROR_MESSAGE);
+        }
+        return buffer;
     }
 }

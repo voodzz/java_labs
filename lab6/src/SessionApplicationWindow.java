@@ -193,11 +193,14 @@ public class SessionApplicationWindow extends JFrame {
     }
 
     void checkForDuplicates(Integer id) throws IllegalArgumentException{
-        for (Student student : session.getSession()) {
-            if (student.getId().equals(id)) {
-                throw new IllegalArgumentException("Student with this ID already exists.");
-            }
-        }
+//        for (Student student : session.getSession()) {
+//            if (student.getId().equals(id)) {
+//                throw new IllegalArgumentException("Student with this ID already exists.");
+//            }
+//        }
+        if (session.getSession().stream().anyMatch(student -> student.getId().equals(id))) {
+            throw new IllegalArgumentException("Student with this ID already exists.");
+        };
     }
 
     void listSubjects() {
