@@ -1,10 +1,29 @@
+import java.util.Comparator;
+
 public class Tree<T extends Comparable<T>> {
     private Node<T> root;
+    private Comparator<T> comparator;
 
-    Tree(T[] elements) {
+    public Tree() {
+        this.comparator = Comparator.naturalOrder();
+    }
+
+    public Tree(T[] elements) {
+        this();
         for (T element : elements) {
             this.add(element);
         }
+    }
+
+    public Tree(Comparator<T> comparator, T[] elements) {
+        for (T element : elements) {
+            this.add(element);
+        }
+        this.comparator = comparator;
+    }
+
+    public Tree(Comparator<T> comparator) {
+        this.comparator = comparator;
     }
 
     public void add(T value) {
@@ -15,7 +34,7 @@ public class Tree<T extends Comparable<T>> {
         if (currentNode == null) {
             currentNode = new Node<T>(value);
             return currentNode;
-        } else if (value.compareTo(currentNode.value) < 0) {
+        } else if (comparator.compare(value, currentNode.value) < 0) {
             currentNode.leftChild = add(currentNode.leftChild, value);
         } else {
             currentNode.rightChild = add(currentNode.rightChild, value);
@@ -31,9 +50,9 @@ public class Tree<T extends Comparable<T>> {
         if (currentNode == null) {
             return null;
         }
-        if (value.compareTo(currentNode.value) == 0) {
+        if (comparator.compare(value, currentNode.value) == 0) {
             return currentNode;
-        } else if (value.compareTo(currentNode.value) < 0) {
+        } else if (comparator.compare(value, currentNode.value) < 0) {
             return find(currentNode.leftChild, value);
         } else {
             return find(currentNode.rightChild, value);
@@ -83,9 +102,9 @@ public class Tree<T extends Comparable<T>> {
     private Node<T> delete(Node<T> root, T value) {
         if (root == null) {
             return null;
-        } else if (value.compareTo(root.value) < 0) {
+        } else if (comparator.compare(value, root.value) < 0) {
             root.leftChild = delete(root.leftChild, value);
-        } else if (value.compareTo(root.value) > 0) {
+        } else if (comparator.compare(value, root.value) > 0) {
             root.rightChild = delete(root.rightChild, value);
         } else {
             // Case 1: No children
