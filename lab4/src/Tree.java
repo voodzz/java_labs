@@ -1,15 +1,10 @@
 import java.util.Comparator;
 
-public class Tree<T extends Comparable<T>> {
+public class Tree<T> {
     private Node<T> root;
     private Comparator<T> comparator;
 
-    public Tree() {
-        this.comparator = Comparator.naturalOrder();
-    }
-
     public Tree(T[] elements) {
-        this();
         for (T element : elements) {
             this.add(element);
         }

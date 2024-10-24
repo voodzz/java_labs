@@ -1,3 +1,5 @@
+import java.util.Comparator;
+
 public class Main {
     public static void main(String[] args) {
         Integer[] dataForTree1 = {8, 3, 10, 1, 6, 4, 7, 14, 13};
@@ -12,5 +14,12 @@ public class Main {
         Tree<Integer> tree2 = new Tree<>(dataForTree2);
         tree2.add(16);
         tree2.nodeLeftRightTraversal();
+
+        Comparator<Integer> comparator = new Comparator<Integer>() {
+            @Override
+            public int compare(Integer t, Integer t1) {
+                return t.compareTo(t1);
+            }
+        }
     }
 }
