@@ -104,11 +104,11 @@ public class Present {
         StringBuilder buffer = new StringBuilder();
         for (Candy candy : candies) {
             if (candy instanceof Chocolate chocolate) {
-                String line = chocolate.getType().name() + " chocolate " +
+                String line = chocolate.getType().name().toLowerCase() + " chocolate " +
                         chocolate.getWeight() + ' ' +chocolate.getPercentOfSugar();
                 buffer.append(line).append('\n');
             } else if (candy instanceof Lollipop lollipop) {
-                String line = lollipop.getColor().name() + " lollipop " +
+                String line = lollipop.getColor().name().toLowerCase() + " lollipop " +
                         lollipop.getWeight() + ' ' + lollipop.getPercentOfSugar();
                 buffer.append(line).append('\n');
             }

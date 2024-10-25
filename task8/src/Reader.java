@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 
 public class Reader {
@@ -49,5 +46,16 @@ public class Reader {
         }
 
         return new Present(candies);
+    }
+
+    String readDataFromFile(File file) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        String line;
+        StringBuilder buffer = new StringBuilder();
+        while ((line = reader.readLine()) != null) {
+            buffer.append(line).append('\n');
+        }
+        buffer.deleteCharAt(buffer.length() - 1);
+        return buffer.toString();
     }
 }
