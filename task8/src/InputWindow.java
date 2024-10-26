@@ -1,9 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 public class InputWindow extends JFrame {
     private JTextArea inputTextArea;
@@ -11,11 +8,17 @@ public class InputWindow extends JFrame {
     private JButton continueButton;
     private JPanel panel;
 
+    private MainWindow mainWindow;
+
+    private File currentFile;
+
     InputWindow() {
+        mainWindow = new MainWindow();
+
+        setSize(500, 500);
         setLocationRelativeTo(null);
         setTitle("Input Dialog");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(500, 500);
 
         panel = new JPanel(new GridBagLayout());
         inputTextArea = new JTextArea(10, 30);
@@ -43,6 +46,7 @@ public class InputWindow extends JFrame {
                 fc.setDialogTitle("Choose File");
                 Reader reader = new Reader();
                 if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                    currentFile = fc.getSelectedFile();
                     String data = reader.readDataFromFile(fc.getSelectedFile());
                     inputTextArea.setText(data);
                 }
@@ -53,7 +57,19 @@ public class InputWindow extends JFrame {
         });
 
         continueButton.addActionListener(actionEvent -> {
-            inputTextArea.setText("");
+            if (currentFile != null) {
+                inputTextArea.setText("");
+                Reader reader = new Reader();
+                try {
+                    mainWindow.setPresent(reader.readPresentFromFile(currentFile));
+                } catch (IOException exception) {
+                    JOptionPane.showMessageDialog(null, exception.getMessage(),
+                            "Exception", JOptionPane.ERROR_MESSAGE);
+                }
+                setVisible(false);
+                mainWindow.setVisible(true);
+                mainWindow.getDataTextArea().setText(mainWindow.getPresent().toString());
+            }
         });
 
         setVisible(true);

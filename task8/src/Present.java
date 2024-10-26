@@ -27,8 +27,9 @@ public class Present {
 
     public Double measureWeight() {
         Double result = 0.;
-        for (Candy candy : candies) {
-            result += candy.getWeight();
+        Iterator<Candy> iterator = iterator();
+        while (iterator.hasNext()) {
+            result += iterator.next().getWeight();
         }
         return result;
     }
@@ -70,7 +71,9 @@ public class Present {
     }
 
     public void addCandy(Candy candy) {
-        candies.add(candy);
+        if (!isThereDuplicate(candy)) {
+            candies.add(candy);
+        }
     }
 
     public ArrayList<Candy> sortByWeight() {
@@ -115,5 +118,18 @@ public class Present {
         }
         buffer.deleteCharAt(buffer.length() - 1);
         return buffer.toString();
+    }
+
+    boolean isThereDuplicate(Candy value) {
+        if (value instanceof Chocolate chocolate) {
+            return candies.stream().anyMatch(candy -> candy.getWeight().equals(chocolate.getWeight()) &&
+                    candy.getPercentOfSugar().equals(chocolate.getPercentOfSugar()) &&
+                    ((Chocolate) candy).getType().equals(chocolate.getType()));
+        } else if (value instanceof Lollipop lollipop) {
+            return candies.stream().anyMatch(candy -> candy.getWeight().equals(lollipop.getWeight()) &&
+                    candy.getPercentOfSugar().equals(lollipop.getPercentOfSugar()) &&
+                    ((Lollipop) candy).getColor().equals(lollipop.getColor()));
+        }
+        return false;
     }
 }
