@@ -8,7 +8,7 @@ public class Task1App extends JFrame {
 
     public Task1App() {
         setTitle("Task 1");
-        setSize(500, 500);
+        setSize(800, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null);
@@ -16,6 +16,7 @@ public class Task1App extends JFrame {
         statusLabel = new JLabel("Cursor Coordinates: ");
         statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
         statusLabel.setBounds(0, this.getHeight() - 50, this.getWidth(), 50);
+        statusLabel.setFont(new Font("Arial", Font.BOLD, 18));
         add(statusLabel);
 
         button = new JButton("Button");
@@ -24,9 +25,18 @@ public class Task1App extends JFrame {
         add(button);
 
         addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 Point point = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), Task1App.this);
                 button.setLocation(point.x - button.getWidth() / 2, point.y - button.getHeight() / 2);
+            }
+        });
+
+        addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                Point point = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), Task1App.this);
+                statusLabel.setText("Cursor Coordinates: " + point.x + ", " + point.y);
             }
         });
 
