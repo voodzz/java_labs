@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 import java.util.Random;
 
 public class Task2App extends JFrame {
@@ -41,9 +41,9 @@ public class Task2App extends JFrame {
                     "Ответ", JOptionPane.INFORMATION_MESSAGE);
         });
 
-        yesButton.addMouseMotionListener(new MouseMotionAdapter() {
+        yesButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseMoved(MouseEvent e) {
+            public void mouseEntered(MouseEvent e) {
                 Random rand = new Random();
                 int x, y;
                 do {
