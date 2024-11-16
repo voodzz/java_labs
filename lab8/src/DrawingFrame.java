@@ -8,13 +8,13 @@ import java.io.IOException;
 
 public class DrawingFrame extends JFrame {
     private JMenuBar menuBar;
-    private BufferedImage image;
     private Color currentColor = Color.RED;
     private JButton redButton;
     private JButton greenButton;
     private JButton blueButton;
 
     private class DrawingPanel extends JPanel {
+        public BufferedImage image;
         public DrawingPanel() {
             setBackground(Color.WHITE);
 
@@ -43,8 +43,8 @@ public class DrawingFrame extends JFrame {
             addComponentListener(new ComponentAdapter() {
                 @Override
                 public void componentResized(ComponentEvent componentEvent) {
-                    int newWidth = drawingPanel.getWidth();
-                    int newHeight = drawingPanel.getHeight();
+                    int newWidth = drawingPanel1.getWidth();
+                    int newHeight = drawingPanel1.getHeight();
 
                     if (newWidth > image.getWidth() || newHeight > image.getHeight()) {
                         BufferedImage newImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
@@ -58,7 +58,7 @@ public class DrawingFrame extends JFrame {
 
                         image = newImage;
 
-                        drawingPanel.setPreferredSize(new Dimension(image.getWidth(), image.getHeight()));
+                        drawingPanel1.setPreferredSize(new Dimension(image.getWidth(), image.getHeight()));
                     }
                 }
             });
@@ -78,7 +78,7 @@ public class DrawingFrame extends JFrame {
         }
     }
 
-    DrawingPanel drawingPanel;
+    DrawingPanel drawingPanel1;
 
     public DrawingFrame() {
         setTitle("Drawing Frame");
@@ -120,9 +120,14 @@ public class DrawingFrame extends JFrame {
 
         add(colorPanel, BorderLayout.NORTH);
 
-        drawingPanel = new DrawingPanel();
-        drawingPanel.setPreferredSize(new Dimension(1400, 1100));
-        add(new JScrollPane(drawingPanel), BorderLayout.CENTER);
+        drawingPanel1 = new DrawingPanel();
+        drawingPanel1.setPreferredSize(new Dimension(700, 1100));
+        DrawingPanel drawingPanel2 = new DrawingPanel();
+        drawingPanel2.setPreferredSize(new Dimension(700, 1100));
+        JPanel panel = new JPanel(new GridLayout());
+        panel.add(drawingPanel1);
+        panel.add(drawingPanel2);
+        add(new JScrollPane(panel), BorderLayout.CENTER);
 
         setVisible(true);
     }
@@ -132,7 +137,7 @@ public class DrawingFrame extends JFrame {
         if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
             try {
                 File file = chooser.getSelectedFile();
-                ImageIO.write(image, "png", file);
+                ImageIO.write(drawingPanel1.image, "png", file);
             } catch (IOException exception) {
                 JOptionPane.showMessageDialog(null, exception);
             }
@@ -144,8 +149,8 @@ public class DrawingFrame extends JFrame {
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             try {
                 File file = chooser.getSelectedFile();
-                image = ImageIO.read(file);
-                drawingPanel.repaint();
+                drawingPanel1.image = ImageIO.read(file);
+                drawingPanel1.repaint();
             } catch (IOException exception) {
                 JOptionPane.showMessageDialog(null, exception);
             }
