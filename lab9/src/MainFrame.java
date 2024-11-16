@@ -11,6 +11,8 @@ public class MainFrame extends JFrame {
 
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.addTab("Task 1", new TaskOnePanel());
+        tabbedPane.addTab("Task 2", new TaskTwoPanel());
+        tabbedPane.addTab("Task 3", new TaskThreePanel());
         add(tabbedPane);
 
         setVisible(true);
