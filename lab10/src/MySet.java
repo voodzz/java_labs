@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class MySet<T> {
+public class MySet<T> implements Aggregate<T> {
     private ArrayList<T> list;
 
     MySet() {
@@ -63,9 +63,7 @@ public class MySet<T> {
 
     public void addAll(Collection<? extends T> c) {
         for (T element : c) {
-            if (!list.contains(element)) {
-                list.add(element);
-            }
+            this.add(element);
         }
     }
 
@@ -76,31 +74,54 @@ public class MySet<T> {
         return result;
     }
 
-    public MySet<T> intersectWith(MySet<T> other) {
+    public MySet<T> intersectWith(MySet<T> other) throws IteratorOutOfBoundsException {
         MySet<T> result = new MySet<>();
-        if (list.size() >= other.list.size()) {
-            for (T element : list) {
-                if (other.list.contains(element)) {
+        MySetIterator<T> iterator;
+        if (this.size() >= other.size()) {
+            iterator = (MySetIterator<T>) this.createIterator();
+            while (!iterator.isDone()) {
+                T element = iterator.currentItem();
+                if (other.contains(element)) {
                     result.add(element);
                 }
+                iterator.next();
             }
         } else {
-            for (T element : other.list) {
-                if (list.contains(element)) {
+            iterator = (MySetIterator<T>) other.createIterator();
+            while (!iterator.isDone()) {
+                T element = iterator.currentItem();
+                if (this.contains(element)) {
                     result.add(element);
                 }
+                iterator.next();
             }
         }
         return result;
     }
 
-    public MySet<T> differenceWith(MySet<T> other) {
+    public MySet<T> differenceWith(MySet<T> other) throws IteratorOutOfBoundsException {
         MySet<T> result = new MySet<>(list);
-        for (T element : other.list) {
-            if (list.contains(element)) {
+        MySetIterator<T> iterator = (MySetIterator<T>) other.createIterator();
+        while (!iterator.isDone()) {
+            T element = iterator.currentItem();
+            if (this.contains(element)) {
                 result.remove(element);
             }
+            iterator.next();
         }
         return result;
+    }
+
+    public T getElement(int index) {
+        return list.get(index);
+    }
+
+    @Override
+    public MyIterator<T> createIterator() {
+        return new MySetIterator<>(this);
+    }
+
+    public boolean contains(T element) {
+        return list.contains(element);
     }
 }
