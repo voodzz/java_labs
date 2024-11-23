@@ -1,16 +1,19 @@
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
         try {
-            MySet<Integer> set1 = new MySet<>();
-            set1.add(1);
-            set1.add(3);
-            set1.add(1);
-            set1.add(1);
-            set1.add(2);
-            set1.add(3);
-            set1.add(4);
+            ArrayList<Integer> arr = new ArrayList<>();
+            arr.add(1);
+            arr.add(3);
+            arr.add(1);
+            arr.add(1);
+            arr.add(2);
+            arr.add(3);
+            arr.add(4);
+
+            MySet<Integer> set1 = new MySet<>(arr);
             System.out.println(set1);
 
             MySet<Integer> set2 = new MySet<>();
@@ -31,7 +34,9 @@ public class Main {
 
             MySet<Integer> difference = set1.differenceWith(set2);
             System.out.println(difference);
-        } catch (IteratorOutOfBoundsException exception) {
+
+            Frame frame = new Frame();
+        } catch (IteratorOutOfBoundsException | FileNotFoundException exception) {
             System.err.println(exception.toString());
         }
     }

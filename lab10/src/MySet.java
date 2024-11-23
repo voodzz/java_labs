@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.*;
 
 public class MySet<T> implements Aggregate<T> {
@@ -18,6 +19,10 @@ public class MySet<T> implements Aggregate<T> {
 
     public boolean isEmpty() {
         return list.isEmpty();
+    }
+
+    public void clear() {
+        list.clear();
     }
 
     @Override
@@ -43,8 +48,10 @@ public class MySet<T> implements Aggregate<T> {
         return sb.toString();
     }
 
-    public List<T> toList() {
-        return list;
+    public DefaultListModel<T> getListModel() {
+        DefaultListModel<T> model = new DefaultListModel<>();
+        model.addAll(list);
+        return model;
     }
 
     public void add(T element) {
@@ -68,6 +75,9 @@ public class MySet<T> implements Aggregate<T> {
     }
 
     public MySet<T> uniteWith(MySet<T> other) {
+        if (other == null || other.isEmpty()) {
+            return this;
+        }
         MySet<T> result = new MySet<>();
         result.addAll(list);
         result.addAll(other.list);
@@ -75,6 +85,10 @@ public class MySet<T> implements Aggregate<T> {
     }
 
     public MySet<T> intersectWith(MySet<T> other) throws IteratorOutOfBoundsException {
+        if (other == null || other.isEmpty()) {
+            return this;
+        }
+
         MySet<T> result = new MySet<>();
         MySetIterator<T> iterator;
         if (this.size() >= other.size()) {
@@ -100,6 +114,9 @@ public class MySet<T> implements Aggregate<T> {
     }
 
     public MySet<T> differenceWith(MySet<T> other) throws IteratorOutOfBoundsException {
+        if (other == null || other.isEmpty()) {
+            return this;
+        }
         MySet<T> result = new MySet<>(list);
         MySetIterator<T> iterator = (MySetIterator<T>) other.createIterator();
         while (!iterator.isDone()) {
