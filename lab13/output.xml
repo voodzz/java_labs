@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<students>
+    <student>
+        <id>111</id>
+        <surname>Войтукевич</surname>
+        <grades>
+            <subject name="ДМиМЛ">7</subject>
+            <subject name="ЛА">8</subject>
+            <subject name="МА">8</subject>
+            <subject name="РКПП">10</subject>
+        </grades>
+    </student>
+    <student>
+        <id>222</id>
+        <surname>Размыслович</surname>
+        <grades>
+            <subject name="ДМиМЛ">10</subject>
+            <subject name="ЛА">10</subject>
+            <subject name="МА">10</subject>
+            <subject name="РКПП">10</subject>
+        </grades>
+    </student>
+    <student>
+        <id>333</id>
+        <surname>Сидоров</surname>
+        <grades>
+            <subject name="ДМиМЛ">5</subject>
+            <subject name="ЛА">5</subject>
+            <subject name="МА">6</subject>
+            <subject name="РКПП">6</subject>
+        </grades>
+    </student>
+    <student>
+        <id>444</id>
+        <surname>Петров</surname>
+        <grades>
+            <subject name="ДМиМЛ">7</subject>
+            <subject name="ЛА">6</subject>
+            <subject name="МА">8</subject>
+            <subject name="РКПП">8</subject>
+        </grades>
+    </student>
+    <student>
+        <id>555</id>
+        <surname>Математиков</surname>
+        <grades>
+            <subject name="ДМиМЛ">10</subject>
+            <subject name="ЛА">10</subject>
+            <subject name="МА">10</subject>
+            <subject name="РКПП">4</subject>
+        </grades>
+    </student>
+    <student>
+        <id>666</id>
+        <surname>Двоечников</surname>
+        <grades>
+            <subject name="ДМиМЛ">5</subject>
+            <subject name="ЛА">5</subject>
+            <subject name="МА">5</subject>
+            <subject name="РКПП">5</subject>
+        </grades>
+    </student>
+    <student>
+        <id>1337</id>
+        <surname>Прыгунов</surname>
+        <grades>
+            <subject name="ИнЯз">10</subject>
+            <subject name="МА">10</subject>
+            <subject name="ОС">10</subject>
+            <subject name="ПП">10</subject>
+            <subject name="СПЭ">10</subject>
+        </grades>
+    </student>
+</students>
